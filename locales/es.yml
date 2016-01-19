@@ -1,0 +1,5 @@
+es:
+  errors:
+    messages:
+      cuit_invalid_length: no posee la longitud correcta
+      cuit_invalid_v_digit: tiene colocado incorrectamente su dígito verificador
