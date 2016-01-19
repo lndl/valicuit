@@ -13,11 +13,11 @@ Y, finalmente, ejecutar **bundle install**
 
 ## Uso
 
-Es un validador más. Dentro de cualquier modelo se especifica que un atributo X se valide con cuit, de esta forma:
+Es un validador más. Dentro de cualquier modelo se especifica que un atributo X se valide con cuit (o cuil, es indistinto), de esta forma:
 
 ```ruby
 class Persona < ActiveRecord::Base
-  validates :cuit, cuit: true
+  validates :cuit, cuit: true  # Notar que también podría usarse cuil: true
 end
 ```
 

@@ -73,5 +73,8 @@ module ActiveModel
         end
       end
     end
+
+    # CUIT/CUIL is the same for the purposes of validation
+    CuilValidator = CuitValidator
   end
 end

@@ -7,6 +7,11 @@ RSpec.describe ActiveModel::Validations::CuitValidator do
   end
 
   context '#check_validity!' do
+    context 'when pass cuil option as validator' do
+      it 'returns the validation options passed (therefore, all is well defined)' do
+        expect(TestModel.validates :cuit, cuil: true).to eq(cuil: true)
+      end
+    end
     context 'when invalid options are passed' do
       it 'throws an ArgumentError' do
         expect do
