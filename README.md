@@ -1,4 +1,7 @@
-# Valicuit
+# ValiCUIT
+
+[![Build Status](https://travis-ci.org/lndl/valicuit.svg?branch=master)](https://travis-ci.org/lndl/valicuit) [![Code Climate](https://codeclimate.com/github/lndl/valicuit/badges/gpa.svg)](https://codeclimate.com/github/lndl/valicuit) [![Test Coverage](https://codeclimate.com/github/lndl/valicuit/badges/coverage.svg)](https://codeclimate.com/github/lndl/valicuit/coverage) [![Issue Count](https://codeclimate.com/github/lndl/valicuit/badges/issue_count.svg)](https://codeclimate.com/github/lndl/valicuit)
+
 Un validador de CUIT/CUIL para ActiveModel &amp; Rails.
 
 ## Instalación
