@@ -2,4 +2,4 @@ language: ruby
 before_install:
   - gem update bundler
 rvm:
-  - 2.0.0-p645
+  - 2.0.0
