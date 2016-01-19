@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Valicuit::VERSION
   s.authors     = ['Lautaro Nahuel De León']
   s.email       = ['laudleon@gmail.com']
-  s.homepage    = 'http://github.com/lndl/valicuil'
+  s.homepage    = 'http://github.com/lndl/valicuit'
   s.summary     = %q{A CUIT/CUIL validator for ActiveModel & Rails}
   s.description = %q{A CUIT/CUIL validator for ActiveModel & Rails}
 
