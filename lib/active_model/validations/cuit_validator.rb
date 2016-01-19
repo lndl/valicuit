@@ -18,7 +18,7 @@ module ActiveModel
       end
 
       def validate_each(record, attr_name, value)
-        return if detect_any_failure_in :format, :v_digit,
+        return if detect_any_failure_in :length, :digits, :v_digit,
           data: [ record, attr_name, value ]
       end
 
@@ -29,16 +29,23 @@ module ActiveModel
         properties.detect { |prop| send "check_#{prop}_failure", *data }
       end
 
-      def check_format_failure(record, attr_name, value)
+      def check_length_failure(record, attr_name, value)
         type, dni, v_digit = separate_cuit_groups value
-        if type.length != 2 || dni.length != 8 || v_digit.length != 1
+        unless type.length == 2 && dni.length == 8 && v_digit.length == 1
+          record.errors.add(attr_name, :cuit_invalid_format)
+        end
+      end
+
+      def check_digits_failure(record, attr_name, value)
+        type, dni, v_digit = separate_cuit_groups value
+        unless (type + dni + v_digit) =~ /\A\d+\Z/
           record.errors.add(attr_name, :cuit_invalid_format)
         end
       end
 
       def check_v_digit_failure(record, attr_name, value)
         type, dni, v_digit = separate_cuit_groups value
-        if v_digit.to_i != compute_v_digit(type, dni)
+        unless v_digit.to_i == compute_v_digit(type, dni)
           record.errors.add(attr_name, :cuit_invalid_v_digit)
         end
       end
@@ -66,11 +73,11 @@ module ActiveModel
       def separate_cuit_groups(cuit)
         separator = options[:separator]
         if separator
-          cuit.split separator
+          cuit.split(separator).first 3
         else
           # Take standard CUIT/CUIL layout (2 digit, 8 digit, 1 digit)
           [ cuit[0..1], cuit[2..9], cuit[10] ]
-        end
+        end.map &:to_s
       end
     end
 

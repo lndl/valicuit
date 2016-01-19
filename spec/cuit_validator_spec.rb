@@ -30,6 +30,60 @@ RSpec.describe ActiveModel::Validations::CuitValidator do
     end
   end
 
+  context '#separate_cuit_groups' do
+    context 'without provide separator' do
+      let(:validator) { ActiveModel::Validations::CuitValidator.new attributes: { _: :_ } }
+      it 'must return an 3-elements Array (Happy)' do
+        expect(validator.send(:separate_cuit_groups, '30615459190')).to be_an_instance_of(Array)
+        expect(validator.send(:separate_cuit_groups, '30615459190').size).to eq(3)
+      end
+
+      it 'must return an 3-elements Array (Sad)' do
+        expect(validator.send(:separate_cuit_groups, '306')).to be_an_instance_of(Array)
+        expect(validator.send(:separate_cuit_groups, '306').size).to eq(3)
+      end
+
+      it 'each element must be an instance of String (Happy)' do
+        validator.send(:separate_cuit_groups, '30615459190').each do |group|
+          expect(group).to be_an_instance_of String
+        end
+      end
+
+      it 'each element must be an instance of String (Sad)' do
+        validator.send(:separate_cuit_groups, '306').each do |group|
+          expect(group).to be_an_instance_of String
+        end
+      end
+    end
+    context 'providing separator' do
+      let(:validator) do
+        ActiveModel::Validations::CuitValidator.new attributes: { _: :_ },
+          separator: '-'
+      end
+      it 'must return an 3-elements Array (Happy)' do
+        expect(validator.send(:separate_cuit_groups, '30-61545919-0')).to be_an_instance_of(Array)
+        expect(validator.send(:separate_cuit_groups, '30-61545919-0').size).to eq(3)
+      end
+
+      it 'must return an 3-elements Array (Sad)' do
+        expect(validator.send(:separate_cuit_groups, '30- - - --')).to be_an_instance_of(Array)
+        expect(validator.send(:separate_cuit_groups, '30- - - --').size).to eq(3)
+      end
+
+      it 'each element must be an instance of String (Happy)' do
+        validator.send(:separate_cuit_groups, '30-61545919-0').each do |group|
+          expect(group).to be_an_instance_of String
+        end
+      end
+
+      it 'each element must be an instance of String (Sad)' do
+        validator.send(:separate_cuit_groups, '306---').each do |group|
+          expect(group).to be_an_instance_of String
+        end
+      end
+    end
+  end
+
   context '#valid' do
     context 'with standard options' do
       before do
@@ -42,6 +96,16 @@ RSpec.describe ActiveModel::Validations::CuitValidator do
         expect(TestModel.new(cuit: '27049852032')).to be_valid
         expect(TestModel.new(cuit: '23218381669')).to be_valid
         expect(TestModel.new(cuit: '30709316547')).to be_valid
+      end
+      context 'when CUIT/CUIL has strange characters' do
+        it 'must return false' do
+          expect(TestModel.new(cuit: '2061s459190')).to be_invalid
+        end
+        it 'must leave a specific message over :cuit in #errors array' do
+          record = TestModel.new(cuit: '2061s459190')
+          record.valid?
+          expect(record.errors[:cuit]).to match_array(['invalid_format'])
+        end
       end
       context 'when CUIT/CUIL has not the correct length' do
         it 'must return false' do
