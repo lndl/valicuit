@@ -77,7 +77,7 @@ module ActiveModel
         else
           # Take standard CUIT/CUIL layout (2 digit, 8 digit, 1 digit)
           [ cuit[0..1], cuit[2..9], cuit[10] ]
-        end.map &:to_s
+        end.map(&:to_s)
       end
     end
 
