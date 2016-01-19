@@ -18,8 +18,7 @@ module ActiveModel
       end
 
       def validate_each(record, attr_name, value)
-
-        return if detect_any_failure_in :length, :v_digit,
+        return if detect_any_failure_in :format, :v_digit,
           data: [ record, attr_name, value ]
       end
 
@@ -30,9 +29,10 @@ module ActiveModel
         properties.detect { |prop| send "check_#{prop}_failure", *data }
       end
 
-      def check_length_failure(record, attr_name, value)
-        if value.length != 11
-          record.errors.add(attr_name, :cuit_invalid_length)
+      def check_format_failure(record, attr_name, value)
+        type, dni, v_digit = separate_cuit_groups value
+        if type.length != 2 || dni.length != 8 || v_digit.length != 1
+          record.errors.add(attr_name, :cuit_invalid_format)
         end
       end
 

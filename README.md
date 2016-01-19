@@ -6,7 +6,7 @@ Un validador de CUIT/CUIL para ActiveModel &amp; Rails.
 Lo de siempre... agregar esta línea en el Gemfile del proyecto:
 
 ```
-gem 'valicuit'
+gem 'valicuit', github: 'lndl/valicuit'
 ```
 
 Y, finalmente, ejecutar **bundle install**
@@ -21,7 +21,17 @@ class Persona < ActiveRecord::Base
 end
 ```
 
-Con esto, se dispone de validación por longitud (por ahora 11 dígitos, sin separador (próximamente se mejorará)) y por dígito verificador (con el algoritomo módulo 11)
+Con esto, se dispone de validación por formato (por defecto 11 dígitos, sin separador) y por dígito verificador (con el algoritomo módulo 11)
+
+## Opciones adicionales
+
+Se puede agregar la opción de incluir y validar un separador para los grupos que componen el CUIT/CUIL, de esta forma:
+
+```ruby
+class Persona < ActiveRecord::Base
+  validates :cuit, cuit: { separator: '-' }
+end
+```
 
 ## Tests
 

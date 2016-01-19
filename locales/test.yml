@@ -1,5 +1,5 @@
 test:
   errors:
     messages:
-      cuit_invalid_length: invalid_length
+      cuit_invalid_format: invalid_format
       cuit_invalid_v_digit: invalid_v_digit
