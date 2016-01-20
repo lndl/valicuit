@@ -96,6 +96,7 @@ RSpec.describe ActiveModel::Validations::CuitValidator do
         expect(TestModel.new(cuit: '27049852032')).to be_valid
         expect(TestModel.new(cuit: '23218381669')).to be_valid
         expect(TestModel.new(cuit: '30709316547')).to be_valid
+        expect(TestModel.new(cuit: '20000000019')).to be_valid
       end
       context 'when CUIT/CUIL has strange characters' do
         it 'must return false' do
@@ -139,6 +140,7 @@ RSpec.describe ActiveModel::Validations::CuitValidator do
         expect(TestModel.new(cuit: '27-04985203-2')).to be_valid
         expect(TestModel.new(cuit: '23-21838166-9')).to be_valid
         expect(TestModel.new(cuit: '30-70931654-7')).to be_valid
+        expect(TestModel.new(cuit: '20-00000001-9')).to be_valid
       end
       context 'when CUIT/CUIL has not the correct length' do
         it 'must return false' do
