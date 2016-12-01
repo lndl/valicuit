@@ -9,7 +9,7 @@ Un validador de CUIT/CUIL para ActiveModel &amp; Rails.
 Lo de siempre... agregar esta línea en el Gemfile del proyecto:
 
 ```
-gem 'valicuit', github: 'lndl/valicuit'
+gem 'valicuit'
 ```
 
 Y, finalmente, ejecutar **bundle install**
