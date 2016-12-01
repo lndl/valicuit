@@ -2,4 +2,6 @@ es:
   errors:
     messages:
       cuit_invalid_format: no posee el formato correcto
+      cuit_dni_incompatible: no es compatible con DNI de la persona
+      cuit_gender_incompatible: no es compatible con el género de la persona
       cuit_invalid_v_digit: tiene colocado incorrectamente su dígito verificador

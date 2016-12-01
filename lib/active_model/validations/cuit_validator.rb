@@ -8,7 +8,7 @@ module ActiveModel
 
     # Here start the implementation of CUIT/CUIL validator
     class CuitValidator < ActiveModel::EachValidator
-      CHECKS = [ :separator ].freeze
+      CHECKS = [ :separator, :dni_compatible, :gender_compatible ].freeze
 
       # Hook that checks the options validity
       # for this validator
@@ -18,7 +18,7 @@ module ActiveModel
       end
 
       def validate_each(record, attr_name, value)
-        return if detect_any_failure_in :length, :digits, :v_digit,
+        return if detect_any_failure_in :length, :digits, :dni_compatibility, :gender_compatibility, :v_digit,
           data: [ record, attr_name, value ]
       end
 
@@ -40,6 +40,23 @@ module ActiveModel
         type, dni, v_digit = separate_cuit_groups value
         unless (type + dni + v_digit) =~ /\A\d+\Z/
           record.errors.add(attr_name, :cuit_invalid_format)
+        end
+      end
+
+      def check_dni_compatibility_failure(record, attr_name, value)
+        _, dni, _ = separate_cuit_groups value
+        unless !options[:dni_compatible].present? || record.public_send(options[:dni_compatible]) == dni
+          record.errors.add(attr_name, :cuit_dni_incompatible)
+        end
+      end
+
+      def check_gender_compatibility_failure(record, attr_name, value)
+        type, _, _ = separate_cuit_groups value
+
+        if options[:gender_compatible].present?
+          unless gender_validation_passing?(record, type)
+            record.errors.add(attr_name, :cuit_gender_incompatible)
+          end
         end
       end
 
@@ -78,6 +95,21 @@ module ActiveModel
           # Take standard CUIT/CUIL layout (2 digit, 8 digit, 1 digit)
           [ cuit[0..1], cuit[2..9], cuit[10] ]
         end.map(&:to_s)
+      end
+
+      def gender_validation_passing?(record, type)
+        raise ArgumentError, 'Valicuit: gender field specification must be present!' unless options[:gender_compatible][:field].present?
+        raise ArgumentError, 'Valicuit: declaration of male value missing!'          unless options[:gender_compatible][:male].present?
+        raise ArgumentError, 'Valicuit: declaration of female value missing!'        unless options[:gender_compatible][:female].present?
+        case type
+        when '20'
+          options[:gender_compatible][:male]
+        when '27'
+          options[:gender_compatible][:female]
+        else
+          # Machist!
+          options[:gender_compatible][:male]
+        end == record.public_send(options[:gender_compatible][:field])
       end
     end
 

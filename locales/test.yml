@@ -2,4 +2,6 @@ test:
   errors:
     messages:
       cuit_invalid_format: invalid_format
+      cuit_dni_incompatible: cuit_dni_incompatible
+      cuit_gender_incompatible: cuit_gender_incompatible
       cuit_invalid_v_digit: invalid_v_digit

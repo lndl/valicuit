@@ -1,6 +1,3 @@
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
-
 require 'simplecov'
 SimpleCov.start
 
@@ -16,9 +13,11 @@ I18n.default_locale = :test
 class TestModel
   include ActiveModel::Validations
 
-  attr_accessor :cuit
+  attr_accessor :cuit, :dni, :gender
 
   def initialize(attributes = {})
-    self.cuit = attributes[:cuit]
+    self.cuit   = attributes[:cuit]
+    self.dni    = attributes[:dni]
+    self.gender = attributes[:gender]
   end
 end

@@ -36,6 +36,29 @@ class Persona < ActiveRecord::Base
 end
 ```
 
+Adicionalmente se puede validar que la parte del género y del DNI del CUIT se corresponda con dichos campos propios en el mismo modelo.
+
+Por ejemplo, para el caso del DNI podría ser:
+
+```ruby
+class Persona < ActiveRecord::Base
+  validates :cuit, cuit: { dni_compatible: :documento }
+end
+```
+
+Y eso verificaría que la parte central del CUIT (que corresponde al DNI) sea igual al valor del campo 'documento' (qué, en dicho modelo, representaría el DNI de la persona)
+
+Análogamente se cumple lo mismo para el género:
+
+```ruby
+class Persona < ActiveRecord::Base
+  validates :cuit, cuit: { gender_compatible: { field: :genero, male: 'M', female: 'F' } }
+end
+```
+
+Y se especifica el campo que representa el género en el modelo, más los valores para validar tales géneros.
+
+
 ## Tests
 
 Se corren con RSpec.

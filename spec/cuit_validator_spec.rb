@@ -163,5 +163,54 @@ RSpec.describe ActiveModel::Validations::CuitValidator do
         end
       end
     end
+    context 'with dni compatible option' do
+      before do
+        TestModel.validates :cuit, cuit: { dni_compatible: :dni }
+      end
+      it 'must return true when CUIT/CUIL is valid and central part of CUIT is equal to DNI' do
+        expect(TestModel.new(cuit: '30615459190', dni: '61545919')).to be_valid
+        expect(TestModel.new(cuit: '20118748698', dni: '11874869')).to be_valid
+        expect(TestModel.new(cuit: '20120112989', dni: '12011298')).to be_valid
+        expect(TestModel.new(cuit: '27049852032', dni: '04985203')).to be_valid
+        expect(TestModel.new(cuit: '23218381669', dni: '21838166')).to be_valid
+        expect(TestModel.new(cuit: '30709316547', dni: '70931654')).to be_valid
+        expect(TestModel.new(cuit: '20000000019', dni: '00000001')).to be_valid
+      end
+      it 'must return false when CUIT/CUIL is valid but central part of CUIT is not equal to DNI' do
+        expect(TestModel.new(cuit: '30615459190', dni: '62545919')).to be_invalid
+        expect(TestModel.new(cuit: '20118748698', dni: '11875869')).to be_invalid
+        expect(TestModel.new(cuit: '20120112989', dni: '12011278')).to be_invalid
+        expect(TestModel.new(cuit: '27049852032', dni: '04945203')).to be_invalid
+        expect(TestModel.new(cuit: '23218381669', dni: '21838196')).to be_invalid
+        expect(TestModel.new(cuit: '30709316547', dni: '70901654')).to be_invalid
+        expect(TestModel.new(cuit: '20000000019', dni: '03000001')).to be_invalid
+      end
+      it 'must leave a specific message over :cuit in #errors array' do
+        record = TestModel.new(cuit: '20120112989', dni: '12011278')
+        record.valid?
+        expect(record.errors[:cuit]).to match_array(['cuit_dni_incompatible'])
+      end
+    end
+    context 'with gender compatible option' do
+      before do
+        TestModel.validates :cuit, cuit: { gender_compatible: { field: :gender, male: 'M', female: 'F' } }
+      end
+      it 'must return true when CUIT/CUIL is valid and gender part is compatible with gender model' do
+        expect(TestModel.new(cuit: '20120112989', gender: 'M')).to be_valid
+        expect(TestModel.new(cuit: '27049852032', gender: 'F')).to be_valid
+      end
+      it 'must return true with cuit type different of 20/27 as "Male"' do
+        expect(TestModel.new(cuit: '30709316547', gender: 'M')).to be_valid
+      end
+      it 'must return false when CUIT/CUIL is valid but gender part is incompatible with gender model' do
+        expect(TestModel.new(cuit: '20120112989', gender: 'F')).to be_invalid
+        expect(TestModel.new(cuit: '27049852032', gender: 'M')).to be_invalid
+      end
+      it 'must leave a specific message over :cuit in #errors array' do
+        record = TestModel.new(cuit: '20120112989', gender: 'F')
+        record.valid?
+        expect(record.errors[:cuit]).to match_array(['cuit_gender_incompatible'])
+      end
+    end
   end
 end
