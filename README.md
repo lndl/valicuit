@@ -52,11 +52,13 @@ Análogamente se cumple lo mismo para el género:
 
 ```ruby
 class Persona < ActiveRecord::Base
-  validates :cuit, cuit: { gender_compatible: { field: :genero, male: 'M', female: 'F' } }
+  validates :cuit, cuit: { gender_compatible: { field: :genero, male: 'M', female: 'F', company: 'C' } }
 end
 ```
 
 Y se especifica el campo que representa el género en el modelo, más los valores para validar tales géneros.
+
+Notar que la opción *company*, para validar CUITs de empresas/instituciones, es opcional (pasará la validación directamente en caso de no estar especificado) mientras que las opciones *male*, *female* y *field* no lo son.
 
 
 ## Tests

@@ -101,15 +101,20 @@ module ActiveModel
         raise ArgumentError, 'Valicuit: gender field specification must be present!' unless options[:gender_compatible][:field].present?
         raise ArgumentError, 'Valicuit: declaration of male value missing!'          unless options[:gender_compatible][:male].present?
         raise ArgumentError, 'Valicuit: declaration of female value missing!'        unless options[:gender_compatible][:female].present?
-        case type
-        when '20'
-          options[:gender_compatible][:male]
-        when '27'
-          options[:gender_compatible][:female]
-        else
-          # Machist!
-          options[:gender_compatible][:male]
-        end == record.public_send(options[:gender_compatible][:field])
+        gender = case type
+                 when '20'
+                   options[:gender_compatible][:male]
+                 when '27'
+                   options[:gender_compatible][:female]
+                 when '30', '33'
+                   options[:gender_compatible][:company] || :pass
+                 when '23', '24', '25', '26'
+                   :pass
+                 else
+                   :dont_pass
+                 end
+
+        gender == :pass ? true : gender == record.public_send(options[:gender_compatible][:field])
       end
     end
 

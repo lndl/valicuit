@@ -193,18 +193,22 @@ RSpec.describe ActiveModel::Validations::CuitValidator do
     end
     context 'with gender compatible option' do
       before do
-        TestModel.validates :cuit, cuit: { gender_compatible: { field: :gender, male: 'M', female: 'F' } }
+        TestModel.validates :cuit, cuit: { gender_compatible: { field: :gender, male: 'M', female: 'F', company: 'C' } }
       end
       it 'must return true when CUIT/CUIL is valid and gender part is compatible with gender model' do
         expect(TestModel.new(cuit: '20120112989', gender: 'M')).to be_valid
         expect(TestModel.new(cuit: '27049852032', gender: 'F')).to be_valid
+        expect(TestModel.new(cuit: '30615459190', gender: 'C')).to be_valid
+        expect(TestModel.new(cuit: '23218381669', gender: 'M')).to be_valid
+        expect(TestModel.new(cuit: '23218381669', gender: 'F')).to be_valid
       end
-      it 'must return true with cuit type different of 20/27 as "Male"' do
-        expect(TestModel.new(cuit: '30709316547', gender: 'M')).to be_valid
+      it 'must return false when CUIT/CUIL is valid but gender part is invalid' do
+        expect(TestModel.new(cuit: '17049852032', gender: 'F')).to be_invalid
       end
       it 'must return false when CUIT/CUIL is valid but gender part is incompatible with gender model' do
         expect(TestModel.new(cuit: '20120112989', gender: 'F')).to be_invalid
         expect(TestModel.new(cuit: '27049852032', gender: 'M')).to be_invalid
+        expect(TestModel.new(cuit: '27049852032', gender: 'C')).to be_invalid
       end
       it 'must leave a specific message over :cuit in #errors array' do
         record = TestModel.new(cuit: '20120112989', gender: 'F')
