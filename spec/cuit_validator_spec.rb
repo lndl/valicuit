@@ -54,6 +54,12 @@ RSpec.describe ActiveModel::Validations::CuitValidator do
           expect(group).to be_an_instance_of String
         end
       end
+
+      it 'gracefully handles nil input values' do
+        validator.send(:separate_cuit_groups, nil).each do |group|
+          expect(group).to be_an_instance_of String
+        end
+      end
     end
     context 'providing separator' do
       let(:validator) do
@@ -111,6 +117,9 @@ RSpec.describe ActiveModel::Validations::CuitValidator do
       context 'when CUIT/CUIL has not the correct length' do
         it 'must return false' do
           expect(TestModel.new(cuit: '301110')).to be_invalid
+        end
+        it 'must return false for a nil value' do
+          expect(TestModel.new(cuit: nil)).to be_invalid
         end
         it 'must leave a specific message over :cuit in #errors array' do
           record = TestModel.new(cuit: '301110')

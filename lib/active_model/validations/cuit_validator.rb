@@ -89,6 +89,7 @@ module ActiveModel
 
       def separate_cuit_groups(cuit)
         separator = options[:separator]
+        cuit = cuit.to_s
         if separator
           cuit.split(separator).first 3
         else
