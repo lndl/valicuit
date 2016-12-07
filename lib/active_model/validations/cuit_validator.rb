@@ -8,14 +8,6 @@ module ActiveModel
 
     # Here start the implementation of CUIT/CUIL validator
     class CuitValidator < ActiveModel::EachValidator
-      CHECKS = [ :separator, :dni_compatible, :gender_compatible ].freeze
-
-      # Hook that checks the options validity
-      # for this validator
-      def check_validity!
-        invalid_options = options.keys - CHECKS
-        raise ArgumentError, "#{invalid_options} are invalid CUIT/CUIL options. You can use only these: #{CHECKS.join(', ')}" unless invalid_options.empty?
-      end
 
       def validate_each(record, attr_name, value)
         return if detect_any_failure_in :length, :digits, :dni_compatibility, :gender_compatibility, :v_digit,

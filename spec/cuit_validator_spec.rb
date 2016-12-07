@@ -5,31 +5,6 @@ RSpec.describe ActiveModel::Validations::CuitValidator do
     TestModel.reset_callbacks(:validate)
   end
 
-  context '#check_validity!' do
-    context 'when pass cuil option as validator' do
-      it 'returns the validation options passed (therefore, all is well defined)' do
-        expect(TestModel.validates :cuit, cuil: true).to eq(cuil: true)
-      end
-    end
-    context 'when invalid options are passed' do
-      it 'throws an ArgumentError' do
-        expect do
-          TestModel.validates :cuit, cuit: { separator: '/', wrong_param: true }
-        end.to raise_error(ArgumentError)
-      end
-    end
-    context 'when valid options are passed' do
-      it 'returns the validation options passed (therefore, all is well defined)' do
-        expect(TestModel.validates :cuit, cuit: { separator: '/' }).to eq(cuit: { separator: '/' })
-      end
-    end
-    context 'when no options are passed (only true)' do
-      it 'returns the validation options passed (therefore, all is well defined)' do
-        expect(TestModel.validates :cuit, cuit: true).to eq(cuit: true)
-      end
-    end
-  end
-
   context '#separate_cuit_groups' do
     context 'without provide separator' do
       let(:validator) { ActiveModel::Validations::CuitValidator.new attributes: { _: :_ } }
