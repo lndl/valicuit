@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.description = %q{A CUIT/CUIL validator for ActiveModel & Rails with multiple customizable options}
   s.licenses    = ['MIT']
 
-  s.add_runtime_dependency 'activemodel', '~> 4'
+  s.add_runtime_dependency 'activemodel', '>= 4'
 
   s.add_development_dependency 'rake', '~> 11.3'
   s.add_development_dependency 'rspec', '~> 3.5'
