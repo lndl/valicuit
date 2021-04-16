@@ -12,13 +12,13 @@ Gem::Specification.new do |s|
   s.description = %q{A CUIT/CUIL validator for ActiveModel & Rails with multiple customizable options}
   s.licenses    = ['MIT']
 
-  s.add_runtime_dependency 'activemodel', '~> 4'
+  s.add_runtime_dependency 'activemodel', '~> 5.2'
 
-  s.add_development_dependency 'rake', '~> 11.3'
-  s.add_development_dependency 'rspec', '~> 3.5'
-  s.add_development_dependency 'simplecov', '~> 0.12'
-  s.add_development_dependency 'codeclimate-test-reporter', '~> 1.0'
-
+  s.add_development_dependency 'rake', '~> 13.0'
+  s.add_development_dependency 'rspec', '~> 3.10'
+  s.add_development_dependency 'simplecov', '~> 0.13'
+  s.add_development_dependency 'codeclimate-test-reporter', '~> 1.0.9'
+	
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- spec/*`.split("\n")
   s.require_paths = ["lib"]
